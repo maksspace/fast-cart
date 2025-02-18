@@ -15,30 +15,16 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    // In a real application, you would fetch this data from an API
-    const mockOrders: Order[] = [
-      {
-        id: "1",
-        items: [
-          { name: "T-Shirt", quantity: 2, price: 19.99 },
-          { name: "Jeans", quantity: 1, price: 49.99 },
-        ],
-        total: 89.97,
-        status: "delivered",
-        date: "2023-06-01",
-      },
-      {
-        id: "2",
-        items: [
-          { name: "Sneakers", quantity: 1, price: 79.99 },
-          { name: "Hat", quantity: 1, price: 14.99 },
-        ],
-        total: 94.98,
-        status: "processing",
-        date: "2023-06-15",
-      },
-    ];
-    setOrders(mockOrders);
+    fetch("/api/orders")
+      .then((res) => res.json())
+      .then((orders) => {
+        setOrders(
+          orders.map((order: any) => ({
+            ...order,
+            status: "processing",
+          })),
+        );
+      });
   }, []);
 
   const getStatusIcon = (status: Order["status"]) => {

@@ -1,4 +1,4 @@
-import { db } from "../../../database/client";
+import { db } from "./database/client";
 
 /**
  * Retrieves the stock for a given product.
@@ -53,7 +53,7 @@ export async function saveOrder(
   transactionId: string,
 ) {
   return await db.transaction(async (trx) => {
-    const [orderId] = await trx("orders").insert(
+    const [order] = await trx("orders").insert(
       {
         customer_id: customerId,
         total_amount: totalAmount,
@@ -63,7 +63,7 @@ export async function saveOrder(
     );
 
     const orderItems = items.map((item) => ({
-      order_id: orderId,
+      order_id: order.id,
       product_id: item.productId,
       quantity: item.amount,
     }));
@@ -77,6 +77,6 @@ export async function saveOrder(
         .decrement("stock", item.amount);
     }
 
-    return { id: orderId };
+    return { id: order.id };
   });
 }

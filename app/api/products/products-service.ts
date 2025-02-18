@@ -1,4 +1,4 @@
-import { db } from "@/database/client";
+import { db } from "./database/client";
 
 export async function getAllProducts() {
   try {

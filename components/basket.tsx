@@ -44,13 +44,26 @@ export function Basket() {
   const handleCheckout = async () => {
     setIsCheckingOut(true);
 
-    fetch("/api/checkout");
+    const reponse = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        customerId: 1,
+        paymentMethodId: 1,
+        items: basket.map((i) => ({
+          productId: i.id,
+          amount: i.quantity,
+        })),
+      }),
+    });
 
     // Simulate API call with a 7-second delay
-    await new Promise((resolve) => setTimeout(resolve, 7000));
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     // Randomly determine if checkout is successful (95% success rate)
-    const isSuccessful = Math.random() > 0.95;
+    const isSuccessful = reponse.ok;
 
     const selectedCardDetails = savedCards.find(
       (card) => card.id === selectedCard,
