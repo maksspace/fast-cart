@@ -1,3 +1,3 @@
 export const dbConfig = {
-  url: process.env["DATABASE_URl"],
+  url: process.env["DATABASE_URL"],
 };
